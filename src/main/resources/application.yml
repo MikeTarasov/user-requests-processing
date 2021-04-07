@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:${db.type}://${db.host}:${db.port}/${db.name}?reconnect=true&verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=${db.timezone}
+    username: ${DB_USER:ugvzosipmljpfmvpesv5}
+    password: ${DB_PASS:9CHTBO8T2dO58T9LGiHP}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 1
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate.ddl-auto: validate
+
+db:
+  type: postgresql
+  host: ${DB_HOST:brl7m3txzmzt8oht5oqo-postgresql.services.clever-cloud.com}
+  port: 5432
+  name: ${DB_NAME:brl7m3txzmzt8oht5oqo}
+  timezone: Europe/Moscow
