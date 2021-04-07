@@ -43,7 +43,7 @@ public class ProcessingController {
     }
 
     @Secured(USER)
-    @PostMapping("/{id}")
+    @PostMapping("/send/{id}")
     public ResponseEntity<?> sendRequestForConsideration(@PathVariable("id") long requestId) {
         return processingService.sendRequestForConsideration(requestId);
     }

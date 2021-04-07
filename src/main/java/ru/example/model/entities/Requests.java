@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Data
 @AllArgsConstructor
@@ -34,4 +35,8 @@ public class Requests {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "operator_id")
     private Users operator;
+
+    public long getTimeStamp() {
+        return date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
 }

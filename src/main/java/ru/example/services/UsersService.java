@@ -1,10 +1,14 @@
 package ru.example.services;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.example.exceptions.UnauthorizedException;
+import ru.example.exceptions.UserNotFoundException;
 import ru.example.model.entities.Users;
 import ru.example.model.repositories.UsersRepository;
 
@@ -33,6 +37,22 @@ public class UsersService implements UserDetailsService {
 
     public Users findUserByEmail(String email) {
         return usersRepository.findByEmail(email);
+    }
+
+    public Users getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            throw new UnauthorizedException();
+        }
+
+        String email = authentication.getName();
+        Users user = usersRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new UserNotFoundException(email);
+        }
+        return user;
     }
 
     public boolean isPasswordCorrect(Users user, String password) {
