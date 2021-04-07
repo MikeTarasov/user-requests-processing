@@ -84,26 +84,29 @@ public class ProcessingService {
     }
 
     public ResponseEntity<?> sendRequestForConsideration(long requestId) {
-        changeRequestStatus(requestId, Status.DRAFT.toString(), Status.SHIPPED.toString());
+        changeRequestStatus(requestId, Status.DRAFT.toString(), Status.SHIPPED.toString(), false);
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
     public ResponseEntity<?> acceptRequest(long requestId) {
-        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.ACCEPTED.toString());
+        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.ACCEPTED.toString(), true);
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
     public ResponseEntity<?> declineRequest(long requestId) {
-        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.DECLINED.toString());
+        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.DECLINED.toString(), true);
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
-    private void changeRequestStatus(long requestId, String oldStatus, String newStatus) {
+    private void changeRequestStatus(long requestId, String oldStatus, String newStatus, boolean isShipped) {
         Request request = getRequest(requestId);
         if (!request.getStatus().equalsIgnoreCase(oldStatus)) {
             throw new CustomException("Wrong status!");
         }
         request.setStatus(newStatus);
+        if (isShipped) {
+            request.setOperator(usersService.getCurrentUser());
+        }
         requestsRepository.saveAndFlush(request);
     }
 }

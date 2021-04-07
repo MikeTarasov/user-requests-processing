@@ -9,6 +9,7 @@ import ru.example.model.enums.Roles;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +65,10 @@ public class User {
 
     public boolean isAdministrator() {
         return isAdmin == 1;
+    }
+
+    public long getTimeStamp() {
+        return regDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public Set<GrantedAuthority> getGrantedAuthorities() {
