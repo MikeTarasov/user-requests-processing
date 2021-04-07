@@ -22,4 +22,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> handleRequestNotFoundException() {
         return ResponseEntity.status(400).body(null);
     }
+
+    @ExceptionHandler(CustomException.class)
+    protected ResponseEntity<?> handleCustomException() {
+        return ResponseEntity.status(400).body(null);
+    }
 }

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.example.exceptions.UnauthorizedException;
 import ru.example.exceptions.UserNotFoundException;
-import ru.example.model.entities.Users;
+import ru.example.model.entities.User;
 import ru.example.model.repositories.UsersRepository;
 
 @Service
@@ -25,7 +25,7 @@ public class UsersService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users user = usersRepository.findByEmail(email);
+        User user = usersRepository.findByEmail(email);
         if (user == null) return null;
 
         return new org.springframework.security.core.userdetails.User(
@@ -35,11 +35,11 @@ public class UsersService implements UserDetailsService {
         );
     }
 
-    public Users findUserByEmail(String email) {
+    public User findUserByEmail(String email) {
         return usersRepository.findByEmail(email);
     }
 
-    public Users getCurrentUser() {
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
@@ -47,7 +47,7 @@ public class UsersService implements UserDetailsService {
         }
 
         String email = authentication.getName();
-        Users user = usersRepository.findByEmail(email);
+        User user = usersRepository.findByEmail(email);
 
         if (user == null) {
             throw new UserNotFoundException(email);
@@ -55,7 +55,7 @@ public class UsersService implements UserDetailsService {
         return user;
     }
 
-    public boolean isPasswordCorrect(Users user, String password) {
+    public boolean isPasswordCorrect(User user, String password) {
         return bCryptPasswordEncoder.matches(password, user.getPassword());
     }
 

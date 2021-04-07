@@ -3,6 +3,7 @@ package ru.example.model.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.example.api.requests.CreateRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.ZoneId;
 @NoArgsConstructor
 @Entity
 @Table(name = "requests")
-public class Requests {
+public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +29,20 @@ public class Requests {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private Users author;
+    private User author;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "operator_id")
-    private Users operator;
+    private User operator;
+
+    public Request(CreateRequest request, User author) {
+        this.status = request.getStatus();
+        this.text = request.getText();
+        date = LocalDateTime.now();
+        this.author = author;
+    }
 
     public long getTimeStamp() {
         return date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

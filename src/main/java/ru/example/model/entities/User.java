@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +48,10 @@ public class Users {
     private Integer isAdmin;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Requests> requests = new ArrayList<>();
+    private List<Request> requests = new ArrayList<>();
 
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)
-    private List<Requests> moderatedRequests = new ArrayList<>();
+    private List<Request> moderatedRequests = new ArrayList<>();
 
 
     public boolean isUser() {

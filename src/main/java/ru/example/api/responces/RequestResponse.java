@@ -2,7 +2,7 @@ package ru.example.api.responces;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.example.model.entities.Requests;
+import ru.example.model.entities.Request;
 
 
 @Data
@@ -13,7 +13,7 @@ public class RequestResponse {
     private String status;
     private long date;
 
-    public RequestResponse(Requests request) {
+    public RequestResponse(Request request) {
         this.text = request.getText();
         this.status = request.getStatus();
         this.date = request.getTimeStamp();
