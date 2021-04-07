@@ -6,4 +6,6 @@ import ru.example.model.entities.Users;
 
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
+
+    Users findByEmail(String email);
 }
