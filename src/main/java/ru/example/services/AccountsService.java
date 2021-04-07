@@ -3,7 +3,9 @@ package ru.example.services;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.example.api.responces.ListUsersResponse;
+import ru.example.api.responces.MessageOkResponse;
 import ru.example.model.entities.User;
+import ru.example.model.enums.Status;
 import ru.example.model.repositories.UsersRepository;
 
 import java.util.List;
@@ -12,9 +14,11 @@ import java.util.List;
 public class AccountsService {
 
     private final UsersRepository usersRepository;
+    private final ProcessingService processingService;
 
-    public AccountsService(UsersRepository usersRepository) {
+    public AccountsService(UsersRepository usersRepository, ProcessingService processingService) {
         this.usersRepository = usersRepository;
+        this.processingService = processingService;
     }
 
 
@@ -29,10 +33,12 @@ public class AccountsService {
     }
 
     public ResponseEntity<?> grantOperatorAccess(long userId) {
-        return null;
+        processingService.changeRequestStatus(userId, Status.SHIPPED.toString(), Status.ACCEPTED.toString(), true);
+        return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
     public ResponseEntity<?> revokeOperatorAccess(long userId) {
-        return null;
+        processingService.changeRequestStatus(userId, Status.SHIPPED.toString(), Status.DECLINED.toString(), true);
+        return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 }

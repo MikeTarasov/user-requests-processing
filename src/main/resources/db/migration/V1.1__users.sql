@@ -4,7 +4,7 @@ CREATE TABLE users
     name        varchar(255),
     surname     varchar(255),
     email       varchar(255)          NOT NULL,
-    password    varchar(50)           NOT NULL,
+    password    varchar(255)          NOT NULL,
     reg_date    timestamp             NOT NULL,
     is_user     int4,
     is_operator int4,

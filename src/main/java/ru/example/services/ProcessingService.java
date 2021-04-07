@@ -98,7 +98,7 @@ public class ProcessingService {
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
-    private void changeRequestStatus(long requestId, String oldStatus, String newStatus, boolean isShipped) {
+    void changeRequestStatus(long requestId, String oldStatus, String newStatus, boolean isShipped) {
         Request request = getRequest(requestId);
         if (!request.getStatus().equalsIgnoreCase(oldStatus)) {
             throw new CustomException("Wrong status!");
