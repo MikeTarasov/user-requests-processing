@@ -1,4 +1,4 @@
-CREATE TABLE request
+CREATE TABLE requests
 (
     id          bigserial PRIMARY KEY        NOT NULL,
     status      varchar(50)                  NOT NULL,
