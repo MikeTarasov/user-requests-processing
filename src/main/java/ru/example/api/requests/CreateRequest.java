@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CreateRequest {
 
     private String text;
-    private String status;
+    private String status; //TODO ?????
 }

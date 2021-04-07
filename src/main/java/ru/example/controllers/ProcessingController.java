@@ -1,5 +1,6 @@
 package ru.example.controllers;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,8 @@ public class ProcessingController {
 
     @Secured(OPERATOR)
     @GetMapping("/submitted")
-    public ResponseEntity<?> getListSubmittedRequests() {
-        return processingService.getListSubmittedRequests();
+    public ResponseEntity<?> getListSubmittedRequests(@Param("offset") int offset, @Param("limit") int limit) {
+        return processingService.getListSubmittedRequests(offset, limit);
     }
 
     @Secured(OPERATOR)

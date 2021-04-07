@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.example.api.requests.CreateRequest;
+import ru.example.model.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class Request {
     private User operator;
 
     public Request(CreateRequest request, User author) {
-        this.status = request.getStatus();
+        this.status = Status.DRAFT.toString();
         this.text = request.getText();
         date = LocalDateTime.now();
         this.author = author;

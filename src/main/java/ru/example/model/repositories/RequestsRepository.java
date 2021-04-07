@@ -1,5 +1,6 @@
 package ru.example.model.repositories;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.example.model.entities.Request;
@@ -11,4 +12,6 @@ import java.util.List;
 public interface RequestsRepository extends JpaRepository<Request, Long> {
 
     List<Request> findByAuthor(User author);
+
+    List<Request> findRequestsByStatusEquals(String status, Pageable pageable);
 }

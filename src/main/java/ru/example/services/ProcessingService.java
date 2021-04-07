@@ -1,5 +1,7 @@
 package ru.example.services;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.example.api.requests.CreateRequest;
@@ -73,26 +75,35 @@ public class ProcessingService {
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
+    public ResponseEntity<?> getListSubmittedRequests(int offset, int limit) {
+        List<Request> requests = requestsRepository
+                .findRequestsByStatusEquals(Status.DRAFT.toString(),
+                        PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "date")));
+
+        return ResponseEntity.status(200).body(new ListRequestsResponse(requests));
+    }
+
     public ResponseEntity<?> sendRequestForConsideration(long requestId) {
-        Request request = getRequest(requestId);
-        if (!request.getStatus().equalsIgnoreCase(Status.DRAFT.toString())) {
-            throw new CustomException("Wrong status!");
-        }
-        request.setStatus(Status.SHIPPED.toString());
-        requestsRepository.saveAndFlush(request);
+        changeRequestStatus(requestId, Status.DRAFT.toString(), Status.SHIPPED.toString());
         return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
-
-    public ResponseEntity<?> getListSubmittedRequests() {
-        return null;
-    }
-
     public ResponseEntity<?> acceptRequest(long requestId) {
-        return null;
+        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.ACCEPTED.toString());
+        return ResponseEntity.status(200).body(new MessageOkResponse());
     }
 
     public ResponseEntity<?> declineRequest(long requestId) {
-        return null;
+        changeRequestStatus(requestId, Status.SHIPPED.toString(), Status.DECLINED.toString());
+        return ResponseEntity.status(200).body(new MessageOkResponse());
+    }
+
+    private void changeRequestStatus(long requestId, String oldStatus, String newStatus) {
+        Request request = getRequest(requestId);
+        if (!request.getStatus().equalsIgnoreCase(oldStatus)) {
+            throw new CustomException("Wrong status!");
+        }
+        request.setStatus(newStatus);
+        requestsRepository.saveAndFlush(request);
     }
 }
